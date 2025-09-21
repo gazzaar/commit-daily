@@ -23,6 +23,7 @@ lerna-debug.log*
 .temp
 .tmp
 
+dist/
 
 # todo file
 todo.org
