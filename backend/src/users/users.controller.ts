@@ -1,23 +1,24 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
-import CreateUserDto from './dto/createUser.dto';
+import { CreateUserDto } from './dto/CreateUser.dto';
 import UsersService from './users.service';
+import { UserDto } from './dto/User.dto';
 
 @Controller('users')
 export default class UsersController {
   constructor(private userService: UsersService) {}
 
   @Get()
-  getUsers() {
-    return this.userService.getUsers();
+  async getUsers(): Promise<UserDto[] | undefined> {
+    return await this.userService.getUsers();
   }
 
   @Get(':id')
-  getUser(@Param('id') id: string) {
-    return this.userService.getUser(id);
+  async getUser(@Param('id') id: string): Promise<UserDto> {
+    return await this.userService.getUser(id);
   }
 
   @Post()
-  createUser(@Body() createUserDto: CreateUserDto) {
-    this.userService.createUser(createUserDto);
+  async createUser(@Body() createUserDto: CreateUserDto) {
+    return this.userService.createUser(createUserDto);
   }
 }

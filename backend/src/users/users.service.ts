@@ -1,30 +1,48 @@
-import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
-import CreateUserDto from './dto/createUser.dto';
-import { User } from './interfaces/user.interface';
+import { Injectable } from '@nestjs/common';
+import { CreateUserDto } from './dto/CreateUser.dto';
+import { PrismaService } from '../prisma/prisma.service';
 import crypto from 'node:crypto';
+import { plainToInstance } from 'class-transformer';
+import { UserDto } from './dto/User.dto';
+import { UserNotFoundException } from './exceptions/userNotFound.exception';
 
 @Injectable()
 export default class UsersService {
-  private users: User[] = [];
+  constructor(private readonly prismaService: PrismaService) {}
 
-  getUsers() {
-    return this.users;
+  async getUsers(): Promise<UserDto[] | undefined> {
+    const users = await this.prismaService.user.findMany();
+    return plainToInstance(UserDto, users, {
+      excludeExtraneousValues: true,
+    });
   }
 
-  getUser(id: string) {
-    const user = this.users.find((user) => user.id === id);
+  async getUser(id: string): Promise<UserDto> {
+    const user = this.prismaService.user.findUnique({
+      where: {
+        id,
+      },
+    });
+
     if (!user) {
-      throw new NotFoundException();
+      throw new UserNotFoundException(id);
     }
-    return user;
+
+    return plainToInstance(UserDto, user, {
+      excludeExtraneousValues: true,
+    });
   }
 
-  createUser(createUserDto: CreateUserDto) {
+  async createUser(createUserDto: CreateUserDto) {
     const user = {
       ...createUserDto,
-      createdAt: Date.now(),
+      createdAt: new Date(),
       id: crypto.randomUUID(),
+      updatedAt: new Date(),
     };
-    this.users.push(user);
+
+    await this.prismaService.user.create({
+      data: user,
+    });
   }
 }
