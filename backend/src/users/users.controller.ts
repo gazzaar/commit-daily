@@ -13,8 +13,8 @@ export default class UsersController {
   }
 
   @Get(':id')
-  async getUser(@Param('id') id: string): Promise<UserDto> {
-    return await this.userService.getUser(id);
+  async getUserById(@Param('id') id: string): Promise<UserDto> {
+    return await this.userService.getUserById(id);
   }
 
   @Post()
