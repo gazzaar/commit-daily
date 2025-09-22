@@ -3,10 +3,27 @@ import UsersService from 'src/users/users.service';
 import { RegisterDto } from './dto/register.dto';
 import bcrypt from 'bcrypt';
 import PostgresErrorCode from 'src/prisma/postgresErrorCode.enum';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
+import { TokenPayload } from './interfaces/tokenPayload.interface';
 
 @Injectable()
 export class AuthenticationService {
-  constructor(private readonly userService: UsersService) {}
+  constructor(
+    private readonly userService: UsersService,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
+  ) {}
+
+  public getCookieWithJwtToken(userId: string) {
+    const payload: TokenPayload = { userId };
+    const token = this.jwtService.sign(payload);
+    return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get('JWT_EXPIRATION_TIME')}`;
+  }
+
+  public getCookieForLogOut() {
+    return `Authentication=; HttpOnly; Path=/; Max-Age=0`;
+  }
 
   public async register(registerationData: RegisterDto) {
     const hashedPassword = await bcrypt.hash(registerationData.password, 10);
