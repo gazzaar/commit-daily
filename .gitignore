@@ -27,4 +27,4 @@ docker.env
 dist/
 
 # todo file
-todo.org
+todo.md
