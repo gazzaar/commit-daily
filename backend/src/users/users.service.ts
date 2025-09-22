@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/CreateUser.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import crypto from 'node:crypto';
@@ -17,7 +17,7 @@ export default class UsersService {
     });
   }
 
-  async getUser(id: string): Promise<UserDto> {
+  async getUserById(id: string): Promise<UserDto> {
     const user = this.prismaService.user.findUnique({
       where: {
         id,
@@ -33,6 +33,25 @@ export default class UsersService {
     });
   }
 
+  async getUserByEmail(email: string): Promise<UserDto> {
+    const user = this.prismaService.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) {
+      throw new HttpException(
+        `User with email ${email} does not exist`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    return plainToInstance(UserDto, user, {
+      excludeExtraneousValues: true,
+    });
+  }
+
   async createUser(createUserDto: CreateUserDto) {
     const user = {
       ...createUserDto,
@@ -41,8 +60,11 @@ export default class UsersService {
       updatedAt: new Date(),
     };
 
-    await this.prismaService.user.create({
+    const newUser = await this.prismaService.user.create({
       data: user,
+    });
+    return plainToInstance(UserDto, newUser, {
+      excludeExtraneousValues: true,
     });
   }
 }
