@@ -18,6 +18,31 @@ model User {
   fullName  String
   email     String   @unique
   password  String
-  createdAt DateTime @db.Timestamp
-  updatedAt DateTime @db.Timestamp
+  createdAt DateTime @default(now()) @db.Timestamp
+  updatedAt DateTime @updatedAt @db.Timestamp
+  habits    Habit[]
+}
+
+model Habit {
+  id          String @id @db.Uuid
+  habitName   String
+  description String
+  createdAt DateTime @default(now()) @db.Timestamp
+  updatedAt DateTime @updatedAt @db.Timestamp
+  userId      String  @db.Uuid
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  entries     HabitEntry[]
+}
+
+model HabitEntry {
+  id          String @id @db.Uuid
+  date        DateTime @db.Date
+  completed   Boolean
+  createdAt DateTime @default(now()) @db.Timestamp
+  updatedAt DateTime @updatedAt @db.Timestamp
+  habitId     String @db.Uuid
+  habit       Habit @relation(fields: [habitId], references: [id], onDelete: Cascade)
+
+  @@unique([habitId, date])
+
 }
