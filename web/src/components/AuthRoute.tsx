@@ -8,7 +8,7 @@ interface AuthRouteProps {
 
 export const AuthRoute: React.FC<AuthRouteProps> = ({
   children,
-  fallbackPath = '/',
+  fallbackPath = '/app/',
 }) => {
   const { isAuthenticated, isLoading } = useAuth();
 
