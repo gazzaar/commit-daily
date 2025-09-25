@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/CreateUser.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import crypto from 'node:crypto';
 import { plainToInstance } from 'class-transformer';
@@ -34,9 +34,9 @@ export default class UsersService {
   }
 
   async getUserByEmail(email: string): Promise<UserDto> {
-    const user = this.prismaService.user.findUnique({
+    const user = await this.prismaService.user.findUnique({
       where: {
-        email,
+        email: email,
       },
     });
 
