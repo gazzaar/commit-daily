@@ -99,19 +99,32 @@ export class HabitService {
       where: { habitId, date: utcMidnight },
     });
 
+    let entry;
+
     if (existingEntry) {
-      return this.prismaService.habitEntry.update({
+      entry = await this.prismaService.habitEntry.update({
         where: { id: existingEntry.id },
         data: { completed: !existingEntry.completed },
       });
+    } else {
+      entry = await this.prismaService.habitEntry.create({
+        data: {
+          id: randomUUID(),
+          habitId,
+          date: utcMidnight,
+          completed: true,
+        },
+      });
     }
 
-    return this.prismaService.habitEntry.create({
-      data: {
-        id: randomUUID(),
-        habitId,
-        date: utcMidnight,
-        completed: true,
+    return this.prismaService.habitEntry.findUnique({
+      where: { id: entry.id },
+      include: {
+        habit: {
+          include: {
+            entries: true,
+          },
+        },
       },
     });
   }
