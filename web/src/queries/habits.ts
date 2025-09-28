@@ -22,7 +22,7 @@ export const CreateHabitMutation = graphql(`
   }
 `);
 
-export const DeleteHabitMutatioin = graphql(`
+export const DeleteHabitMutation = graphql(`
   mutation DeleteHabit($habitId: String!) {
     deleteHabit(habitId: $habitId)
   }
