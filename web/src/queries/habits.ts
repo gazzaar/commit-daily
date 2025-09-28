@@ -34,6 +34,9 @@ export const ToggleHabitMutation = graphql(`
   mutation ToggleHabit($input: ToggleHabitInput!) {
     toggleHabit(input: $input) {
       completed
+      habit {
+        currentStreak
+      }
     }
   }
 `);

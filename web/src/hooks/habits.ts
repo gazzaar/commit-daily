@@ -1,7 +1,8 @@
 import {
   AllHabitsQuery,
   CreateHabitMutation,
-  DeleteHabitMutatioin,
+  DeleteHabitMutation,
+  ToggleHabitMutation,
 } from '../queries/habits';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { gqlClient } from '../lib/gqlClient';
@@ -37,7 +38,7 @@ export const useDeleteHabit = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (habitId: string) =>
-      gqlClient.request(DeleteHabitMutatioin, { habitId }),
+      gqlClient.request(DeleteHabitMutation, { habitId }),
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['habits'] });
@@ -45,6 +46,37 @@ export const useDeleteHabit = () => {
 
     onError: () => {
       console.error('Failed to create habit');
+    },
+  });
+};
+
+export const useToggleHabit = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (input: any) =>
+      gqlClient.request(ToggleHabitMutation, { input }),
+
+    onSuccess: (data, variables) => {
+      queryClient.setQueryData(['habits'], (oldData: any) => {
+        if (!oldData) return oldData;
+
+        return {
+          ...oldData,
+          habits: oldData.habits.map((habit: any) =>
+            habit.id === variables.habitId
+              ? {
+                  ...habit,
+                  completedToday: data.toggleHabit.completed,
+                  currentStreak: data.toggleHabit.habit?.currentStreak,
+                }
+              : habit,
+          ),
+        };
+      });
+    },
+
+    onError: (err) => {
+      console.error('Failed to toggle habit', err);
     },
   });
 };
