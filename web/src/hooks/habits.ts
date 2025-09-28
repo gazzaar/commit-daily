@@ -24,7 +24,7 @@ export const useCreateHabit = () => {
       gqlClient.request(CreateHabitMutation, { data }),
     onSuccess: (newHabit) => {
       queryClient.setQueryData(['habits'], (old: any) => ({
-        habits: [...(old?.habits || []), newHabit.createHabit],
+        habits: [newHabit.createHabit, ...(old?.habits || [])],
       }));
     },
     onError: () => {
