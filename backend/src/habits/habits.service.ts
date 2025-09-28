@@ -17,7 +17,7 @@ export class HabitService {
         where: {
           userId: userId,
         },
-        orderBy: { createdAt: 'desc' },
+        orderBy: { updatedAt: 'desc' },
       });
 
       if (!habits) {
