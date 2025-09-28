@@ -7,6 +7,8 @@ export const AllHabitsQuery = graphql(`
       habitName
       description
       createdAt
+      completedToday
+      currentStreak
     }
   }
 `);
