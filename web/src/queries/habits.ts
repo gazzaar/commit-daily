@@ -29,3 +29,11 @@ export const DeleteHabitMutation = graphql(`
     deleteHabit(habitId: $habitId)
   }
 `);
+
+export const ToggleHabitMutation = graphql(`
+  mutation ToggleHabit($input: ToggleHabitInput!) {
+    toggleHabit(input: $input) {
+      completed
+    }
+  }
+`);
