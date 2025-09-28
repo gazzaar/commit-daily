@@ -1,0 +1,45 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+input CreateHabitInput {
+  description: String
+  habitName: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Habit {
+  completedToday: Boolean!
+  createdAt: DateTime!
+  currentStreak: Int!
+  description: String!
+  entries: [HabitEntry!]
+  habitName: String!
+  id: String!
+  updatedAt: DateTime!
+  userId: String!
+}
+
+type HabitEntry {
+  completed: Boolean!
+  createdAt: DateTime!
+  date: DateTime!
+  habit: Habit
+  habitId: String!
+  id: String!
+  updatedAt: DateTime!
+}
+
+type Mutation {
+  createHabit(data: CreateHabitInput!): Habit!
+  deleteHabit(habitId: String!): Boolean!
+}
+
+type Query {
+  habits: [Habit!]!
+}
