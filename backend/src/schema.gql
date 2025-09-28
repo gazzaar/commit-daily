@@ -36,9 +36,15 @@ type Query {
 type Mutation {
   createHabit(data: CreateHabitInput!): Habit!
   deleteHabit(habitId: String!): Boolean!
+  toggleHabit(input: ToggleHabitInput!): HabitEntry!
 }
 
 input CreateHabitInput {
   habitName: String!
   description: String
+}
+
+input ToggleHabitInput {
+  habitId: String!
+  date: String!
 }

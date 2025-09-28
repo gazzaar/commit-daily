@@ -17,6 +17,7 @@ export class HabitService {
         where: {
           userId: userId,
         },
+        orderBy: { createdAt: 'desc' },
       });
 
       if (!habits) {
@@ -69,5 +70,49 @@ export class HabitService {
     } catch (error) {
       throw new NotFoundException('Habit not found');
     }
+  }
+
+  async getHabitEntries(habitId: string) {
+    return await this.prismaService.habitEntry.findMany({
+      where: {
+        habitId,
+      },
+      orderBy: { date: 'desc' },
+    });
+  }
+
+  async getHabitEntryByDate(habitId: string, date: Date) {
+    const utcMidnight = new Date(
+      Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()),
+    );
+    return await this.prismaService.habitEntry.findFirst({
+      where: { habitId, date: utcMidnight },
+    });
+  }
+
+  async toggleHabitEntry(habitId: string, date: Date) {
+    const utcMidnight = new Date(
+      Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()),
+    );
+
+    const existingEntry = await this.prismaService.habitEntry.findFirst({
+      where: { habitId, date: utcMidnight },
+    });
+
+    if (existingEntry) {
+      return this.prismaService.habitEntry.update({
+        where: { id: existingEntry.id },
+        data: { completed: !existingEntry.completed },
+      });
+    }
+
+    return this.prismaService.habitEntry.create({
+      data: {
+        id: randomUUID(),
+        habitId,
+        date: utcMidnight,
+        completed: true,
+      },
+    });
   }
 }

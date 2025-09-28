@@ -8,3 +8,12 @@ export class CreateHabitInput {
   @Field({ nullable: true })
   description?: string;
 }
+
+@InputType()
+export class ToggleHabitInput {
+  @Field()
+  habitId: string;
+
+  @Field()
+  date: string;
+}
