@@ -12,13 +12,15 @@
   "dependencies": {
     "@graphql-codegen/client-preset": "^5.0.1",
     "@graphql-typed-document-node/core": "^3.2.0",
+    "@tailwindcss/vite": "^4.1.13",
     "@tanstack/react-query": "^5.90.2",
     "@tanstack/react-router": "^1.132.2",
     "@tanstack/react-router-devtools": "^1.132.2",
     "graphql": "^16.11.0",
     "graphql-request": "^7.2.0",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "tailwindcss": "^4.1.13"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
@@ -38,7 +40,8 @@
   },
   "pnpm": {
     "onlyBuiltDependencies": [
-      "@parcel/watcher"
+      "@parcel/watcher",
+      "@tailwindcss/oxide"
     ]
   }
 }
