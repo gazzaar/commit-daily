@@ -1,13 +1,11 @@
-import { useState } from 'react';
 import { useAuth } from '../../auth/AuthContext';
 import { Link } from '@tanstack/react-router';
-import styles from './header.module.css';
 const Header = () => {
   const { user, isAuthenticated, logout } = useAuth();
 
   return (
     <>
-      <header className={styles.header}>
+      <header className='header'>
         <h1> Commit Daily</h1>
 
         {isAuthenticated ? (
@@ -18,25 +16,25 @@ const Header = () => {
 
         {isAuthenticated ? (
           <>
-            <div className={styles.tabs}>
-              <Link to='/app/manage-habits' className={styles.link}>
+            <div className='tabs'>
+              <Link to='/app/manage-habits' className='link'>
                 manage Habits
               </Link>
-              <Link to='/app/dashboard' className={styles.link}>
+              <Link to='/app/dashboard' className='link'>
                 dashboard
               </Link>
             </div>
-            <button className={styles.btn} onClick={() => logout()}>
+            <button className='btn' onClick={() => logout()}>
               logout
             </button>
           </>
         ) : (
           <>
-            <div className={styles.btnsContainer}>
-              <Link className={styles.link} to='/auth/register'>
+            <div className='btnsContainer'>
+              <Link className='link' to='/auth/register'>
                 Register
               </Link>
-              <Link className={styles.link} to='/auth/login'>
+              <Link className='link' to='/auth/login'>
                 Login
               </Link>
             </div>
