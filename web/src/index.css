@@ -1,4 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 @import 'tailwindcss';
+
+@theme {
+  --font-lato: 'Roboto', sans-serif;
+  --color-dodger-blue-50: #eefaff;
+  --color-dodger-blue-100: #d9f2ff;
+  --color-dodger-blue-200: #bce9ff;
+  --color-dodger-blue-300: #8dddff;
+  --color-dodger-blue-400: #58c7ff;
+  --color-dodger-blue-500: #31abff;
+  --color-dodger-blue-600: #2492f6;
+  --color-dodger-blue-700: #1375e2;
+  --color-dodger-blue-800: #165eb7;
+  --color-dodger-blue-900: #185090;
+  --color-dodger-blue-950: #143157;
+}
 
 @layer base {
   *,
