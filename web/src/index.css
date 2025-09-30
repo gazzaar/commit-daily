@@ -28,9 +28,38 @@
 
 @layer components {
   .header {
-    display: flex;
-    gap: 2rem;
-    align-items: center;
+    @apply flex items-center justify-between max-w-[1440px] mx-auto pt-3 px-4 sm:px-6 lg:px-8;
+
+    div {
+      @apply flex items-center gap-6;
+
+      &:first-child {
+        @apply gap-12;
+      }
+
+      .nav {
+        @apply flex items-center gap-2;
+
+        .tab {
+          @apply text-base text-dodger-blue-950 hover:bg-dodger-blue-500 active:bg-dodger-blue-700 hover:text-dodger-blue-50  focus:ring-dodger-blue-500 focus:bg-dodger-blue-500 focus:text-dodger-blue-50 active:text-dodger-blue-50   no-underline rounded-md px-3 py-1 active:scale-95 transition;
+        }
+        .active {
+          @apply bg-dodger-blue-500 text-dodger-blue-50;
+        }
+      }
+
+      .username {
+        @apply text-dodger-blue-950 text-lg;
+      }
+
+      .btn-logout {
+        @apply text-base flex gap-2 items-center justify-around hover:text-dodger-blue-50 hover:bg-dodger-blue-950 border border-dodger-blue-950;
+      }
+    }
+
+    .text-primary {
+      @apply text-3xl text-dodger-blue-950 font-bold;
+    }
   }
 
   .btnsContainer {
