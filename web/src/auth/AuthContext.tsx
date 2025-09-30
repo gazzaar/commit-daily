@@ -123,6 +123,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     });
     queryClient.setQueryData(['validateToken'], null);
     queryClient.invalidateQueries({ queryKey: ['validateToken'] });
+    queryClient.removeQueries({ queryKey: ['habits'] });
   };
 
   return (
