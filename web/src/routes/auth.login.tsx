@@ -20,29 +20,41 @@ function Login() {
   };
   return (
     <>
-      <form onSubmit={hndleSubmit}>
-        <div>
-          <label>Email:</label>
+      <form className='form' onSubmit={hndleSubmit}>
+        <div className='input-container'>
+          <label htmlFor='email'>Email:</label>
           <input
             type='email'
             name='email'
+            id='email'
+            required
             placeholder='example@mail.com'
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
 
-        <div>
-          <label>Password:</label>
+        <div className='input-container'>
+          <label htmlFor='password'>Password:</label>
           <input
             type='text'
             name='password'
+            required
+            id='password'
             onChange={(e) => setPassword(e.target.value)}
-            placeholder='password'
+            placeholder='p@ssw0rd'
           />
         </div>
 
-        <button type='submit'>Log in</button>
-        <Link to='/auth/register'> Don't have an account! Register now</Link>
+        <button className='btn' type='submit'>
+          Log in
+        </button>
+        <p>
+          Don't have an account!{' '}
+          <Link className='link' to='/auth/register'>
+            {' '}
+            Register now
+          </Link>
+        </p>
       </form>
     </>
   );

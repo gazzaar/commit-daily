@@ -21,39 +21,53 @@ function Register() {
   };
   return (
     <>
-      <form onSubmit={hndleSubmit}>
-        <div>
-          <label> Full Name:</label>
+      <form className='form' onSubmit={hndleSubmit}>
+        <div className='input-container'>
+          <label htmlFor='full-name'> Full Name:</label>
           <input
             type='text'
             name='fullName'
+            id='full-name'
+            required
             placeholder='Fathy Elgazzaar'
             onChange={(e) => setFullname(e.target.value)}
           />
         </div>
 
-        <div>
-          <label>Email:</label>
+        <div className='input-container'>
+          <label htmlFor='email'>Email:</label>
           <input
             type='email'
             name='email'
+            id='email'
+            required
             placeholder='example@mail.com'
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
 
-        <div>
-          <label>Password:</label>
+        <div className='input-container'>
+          <label htmlFor='password'>Password:</label>
           <input
             type='text'
             name='password'
+            id='password'
+            required
             onChange={(e) => setPassword(e.target.value)}
-            placeholder='password'
+            placeholder='p@ssw0rd'
           />
         </div>
 
-        <button type='submit'>Sign up</button>
-        <Link to='/auth/login'>Already have an account! Login now</Link>
+        <button className='btn' type='submit'>
+          Sign up
+        </button>
+        <p>
+          Already have an account!
+          <Link to='/auth/login' className='link'>
+            {' '}
+            Login now
+          </Link>
+        </p>
       </form>
     </>
   );
