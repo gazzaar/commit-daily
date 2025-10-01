@@ -142,20 +142,46 @@
     border-radius: 4px;
     padding: 8px 16px;
   }
+  .habits {
+    @apply grid grid-cols-3 gap-6 items-center  py-2 px-4;
 
-  .link,
-  .link:active,
-  .link:visited {
-    font-size: 18px;
-    text-decoration: none;
-    color: #fff;
-    background-color: #333;
-    border-radius: 4px;
-    padding: 8px 16px;
-  }
+    .habit {
+      @apply bg-dodger-blue-100 flex flex-col rounded-md px-4 py-4 shadow hover:scale-105 transition duration-300 ease-in-out gap-2;
 
-  .tabs {
-    display: flex;
-    gap: 1rem;
+      .habit-name {
+        @apply text-2xl;
+        &::first-letter {
+          @apply uppercase;
+        }
+      }
+
+      .habit-descriptioin {
+        @apply text-lg;
+
+        &::first-letter {
+          @apply uppercase;
+        }
+      }
+
+      .streak {
+        @apply text-base;
+      }
+      .habit-action {
+        @apply flex  gap-2 mt-2 items-center;
+        input {
+          @apply w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 rounded-md focus:ring-blue-500 focus:ring-2 cursor-pointer;
+        }
+        label {
+          @apply ml-2 text-sm font-medium text-gray-700 cursor-pointer select-none;
+        }
+        .btn-delete {
+          @apply text-red-500  border border-gray-500  bg-white;
+        }
+        .btn-edit {
+          @apply w-1/1 flex items-center justify-center gap-2 border px-6 py-1 rounded-md bg-dodger-blue-50
+                   hover:bg-dodger-blue-200  transition border-gray-500 duration-300;
+        }
+      }
+    }
   }
 }
