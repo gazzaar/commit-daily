@@ -1,4 +1,4 @@
-import { graphql } from '../gql';
+import { graphql } from "../gql";
 
 export const AllHabitsQuery = graphql(`
   query AllHabits {
@@ -20,6 +20,8 @@ export const CreateHabitMutation = graphql(`
       habitName
       description
       createdAt
+      completedToday
+      currentStreak
     }
   }
 `);
