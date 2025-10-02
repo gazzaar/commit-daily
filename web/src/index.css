@@ -33,7 +33,7 @@
 
 @layer components {
   .wrapper {
-    @apply max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 min-h-screen pt-12.5 pb-20;
+    @apply max-w-[1140px] mx-auto px-4 sm:px-6 lg:px-8 min-h-screen pt-12.5 pb-20;
   }
 
   /** HEADER  **/
@@ -71,6 +71,7 @@
       @apply text-3xl text-dodger-blue-950 font-bold;
     }
   }
+  /** FORM **/
   .form {
     @apply bg-dodger-blue-950 max-w-[600px] min-w-[500px]  px-8 py-6 rounded-md absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col gap-4 justify-center text-dodger-blue-50;
 
@@ -89,46 +90,8 @@
       @apply bg-dodger-blue-500 text-dodger-blue-50 hover:bg-dodger-blue-600;
     }
 
-    .btn {
-        @apply inline-block  bg-none  text-xl py-1 px-3 rounded-md  focus:scale-95 transition;
-    }
-    .habits {
-        @apply grid grid-cols-3 gap-6 items-center  py-2 px-4;
-
-        .habit {
-            @apply bg-dodger-blue-100 flex flex-col rounded-md px-4 py-4 shadow hover:scale-105 transition duration-300 ease-in-out;
-
-            .habit-name {
-                @apply text-2xl;
-                &::first-letter {
-                    @apply uppercase;
-                }
-            }
-
-            .habit-descriptioin {
-                @apply text-lg;
-
-                &::first-letter {
-                    @apply uppercase;
-                }
-            }
-
-            .streak {
-                @apply text-base;
-            }
-            .habit-action {
-                @apply flex;
-                input {
-                    @apply w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded-md focus:ring-blue-500 focus:ring-2 cursor-pointer;
-                }
-                label {
-                    @apply ml-2 text-sm font-medium text-gray-700 cursor-pointer select-none;
-                }
-                .btn-delete {
-                    @apply text-red-500  border border-dodger-blue-500 bg-white;
-                }
-            }
-        }
+    .link {
+      @apply hover:border-b-1 text-dodger-blue-200 hover:text-dodger-blue-500 transition;
     }
   }
   .btnsContainer {
@@ -136,16 +99,9 @@
     align-items: center;
     gap: 1.5rem;
   }
+
   .btn {
-    display: inline-block;
-    background: none;
-    color: #fff;
-    background-color: #333;
-    font-size: 18px;
-    cursor: pointer;
-    border: none;
-    border-radius: 4px;
-    padding: 8px 16px;
+    @apply inline-block  bg-none  text-xl py-1 px-3 rounded-md  focus:scale-95 transition;
   }
   .habits {
     @apply grid grid-cols-3 gap-6 items-center  py-2 px-4;
@@ -186,6 +142,28 @@
           @apply w-1/1 flex items-center justify-center gap-2 border px-6 py-1 rounded-md bg-dodger-blue-50
                    hover:bg-dodger-blue-200  transition border-gray-500 duration-300;
         }
+      }
+    }
+  }
+  .dialog {
+    @apply m-auto  bg-dodger-blue-950 rounded-lg shadow-lg;
+
+    .form-add-habit {
+      @apply bg-dodger-blue-950 max-w-[600px] min-w-[500px]  px-8 py-6 rounded-md   flex flex-col gap-4 justify-center text-dodger-blue-50;
+
+      .input-container {
+        @apply flex flex-col gap-2;
+
+        label {
+          @apply text-lg;
+        }
+
+        input {
+          @apply bg-dodger-blue-50 text-dodger-blue-950 py-2 px-3 rounded-md outline-0 focus:border-2 focus:border-dodger-blue-600 border-2 border-dodger-blue-50 transition text-base;
+        }
+      }
+      .btn {
+        @apply bg-dodger-blue-500 text-dodger-blue-50 hover:bg-dodger-blue-600;
       }
     }
   }
