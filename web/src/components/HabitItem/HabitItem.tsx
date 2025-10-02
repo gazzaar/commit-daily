@@ -1,17 +1,19 @@
+import { useId } from 'react';
+import { formatStreak } from '../../util/formatStreak';
+import { Checkbox } from '@heroui/checkbox';
 const HabitItem = ({ habitData, children }: any) => {
+  const reactId = useId();
+  const inputId = `${reactId}habit${habitData.id}`;
+  // TODO: fix date local issue and iso
   return (
-    <>
-      <div>
-        <div key={habitData.id}>
-          <h1>{habitData.habitName}</h1>
-          <p>{habitData.description}</p>
-          <p>{habitData.completedToday ? 'Completed' : 'No No '}</p>
-          <p>{habitData.currentStreak}</p>
-          <p>{new Date(habitData.createdAt).toLocaleDateString()}</p>
-        </div>
-      </div>
-      {children}
-    </>
+    <div className='habit' key={habitData.id}>
+      <h2 className='habit-name'>{habitData.habitName}</h2>
+      <p className='habit-descriptioin'>{habitData.description}</p>
+      <p className='streak'> {formatStreak(habitData.currentStreak)}</p>
+      {/* <p>{new Date(habitData.createdAt).toISOString()}</p> */}
+
+      <div className='habit-action'>{children(inputId)}</div>
+    </div>
   );
 };
 
