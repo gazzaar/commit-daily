@@ -1,47 +1,32 @@
-import { useAuth } from '../../auth/AuthContext';
+import { useAuth } from '../auth/AuthContext';
 import { Link } from '@tanstack/react-router';
+import { HiOutlineLogout } from 'react-icons/hi';
 const Header = () => {
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, logout } = useAuth();
 
   return (
-    <>
-      <header className='header'>
-        <h1> Commit Daily</h1>
+    <header className='header'>
+      <div>
+        <h1 className='text-primary'>Commit Daily</h1>
+        <nav className='nav'>
+          <Link to='/app/dashboard' className='tab'>
+            Dashboard
+          </Link>
 
-        {isAuthenticated ? (
-          <h1>welcome {user?.fullName}!</h1>
-        ) : (
-          <h1> welocme guest!</h1>
-        )}
+          <Link to='/app/manage-habits' className='tab'>
+            Manage Habits
+          </Link>
+        </nav>
+      </div>
 
-        {isAuthenticated ? (
-          <>
-            <div className='tabs'>
-              <Link to='/app/manage-habits' className='link'>
-                manage Habits
-              </Link>
-              <Link to='/app/dashboard' className='link'>
-                dashboard
-              </Link>
-            </div>
-            <button className='btn' onClick={() => logout()}>
-              logout
-            </button>
-          </>
-        ) : (
-          <>
-            <div className='btnsContainer'>
-              <Link className='link' to='/auth/register'>
-                Register
-              </Link>
-              <Link className='link' to='/auth/login'>
-                Login
-              </Link>
-            </div>
-          </>
-        )}
-      </header>
-    </>
+      <div>
+        <h1 className='username'>Welcome, {user?.fullName}</h1>
+        <button className='btn btn-logout' onClick={() => logout()}>
+          <HiOutlineLogout />
+          <span>Logout</span>
+        </button>
+      </div>
+    </header>
   );
 };
 
