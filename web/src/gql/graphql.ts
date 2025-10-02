@@ -75,7 +75,6 @@ export type Query = {
 };
 
 export type ToggleHabitInput = {
-  date: Scalars['String']['input'];
   habitId: Scalars['String']['input'];
 };
 

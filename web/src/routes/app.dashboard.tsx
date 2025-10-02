@@ -1,7 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useHabits, useToggleHabit } from '../hooks/habits';
 import HabitItem from '../components/HabitItem/HabitItem';
-import { Checkbox } from '@heroui/checkbox';
 
 export const Route = createFileRoute('/app/dashboard')({
   component: Dashboard,
@@ -13,10 +12,8 @@ function Dashboard() {
 
   const handleToggleHabit = async (habitId: string) => {
     try {
-      const date = new Date().toISOString().substring(0, 10);
       await toggleHabit.mutateAsync({
         habitId,
-        date,
       });
     } catch (err) {
       throw new Error(`Error: ${err}`);

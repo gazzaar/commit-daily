@@ -6,6 +6,7 @@ import {
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateHabitDto } from './dto/createHabit.dto';
 import { randomUUID } from 'crypto';
+import { getLocalDateString } from './util/getLocalDate';
 
 @Injectable()
 export class HabitService {
@@ -82,21 +83,17 @@ export class HabitService {
   }
 
   async getHabitEntryByDate(habitId: string, date: Date) {
-    const utcMidnight = new Date(
-      Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()),
-    );
+    const localDateStr = getLocalDateString(date);
     return await this.prismaService.habitEntry.findFirst({
-      where: { habitId, date: utcMidnight },
+      where: { habitId, date: new Date(localDateStr) },
     });
   }
 
-  async toggleHabitEntry(habitId: string, date: Date) {
-    const utcMidnight = new Date(
-      Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()),
-    );
+  async toggleHabitEntry(habitId: string) {
+    const localDateStr = getLocalDateString(new Date());
 
     const existingEntry = await this.prismaService.habitEntry.findFirst({
-      where: { habitId, date: utcMidnight },
+      where: { habitId, date: new Date(localDateStr) },
     });
 
     let entry;
@@ -111,7 +108,7 @@ export class HabitService {
         data: {
           id: randomUUID(),
           habitId,
-          date: utcMidnight,
+          date: new Date(localDateStr),
           completed: true,
         },
       });

@@ -13,7 +13,4 @@ export class CreateHabitInput {
 export class ToggleHabitInput {
   @Field()
   habitId: string;
-
-  @Field()
-  date: string;
 }

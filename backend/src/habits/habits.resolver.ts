@@ -15,6 +15,7 @@ import { GraphqlJwtAuthGuard } from 'src/authentication/graphql-jwt-auth.guard';
 import { RequestUser } from 'src/authentication/interfaces/requestUser.interface';
 import { CreateHabitInput, ToggleHabitInput } from './inputs/habit.input';
 import { HabitEntry } from './models/habitEntry.model';
+import { getLocalDateString } from './util/getLocalDate';
 
 @Resolver(() => Habit)
 export class HabitsResolver {
@@ -23,34 +24,42 @@ export class HabitsResolver {
   private calculateCurrentStreak(entries: HabitEntry[]): number {
     if (!entries || entries.length === 0) return 0;
 
-    // Sort entries by date (newest first)
-    const sortedEntries = entries
-      .filter((entry) => entry.completed)
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    // Completed entries sorted newest first by local date string
+    const completedEntries = entries
+      .filter((e) => e.completed)
+      .sort((a, b) =>
+        getLocalDateString(b.date).localeCompare(getLocalDateString(a.date)),
+      );
 
-    if (sortedEntries.length === 0) return 0;
+    if (completedEntries.length === 0) return 0;
 
-    let streak = 0;
-    const today = new Date();
-    const currentDate = new Date(today);
+    const todayStr = getLocalDateString(new Date());
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayStr = getLocalDateString(yesterday);
 
-    // Check if today or yesterday has an entry (streak can continue)
-    const latestEntry = new Date(sortedEntries[0].date);
-    const daysDiff = Math.floor(
-      (today.getTime() - latestEntry.getTime()) / (1000 * 60 * 60 * 24),
+    const latestEntryDateStr = getLocalDateString(
+      new Date(completedEntries[0].date),
     );
 
-    if (daysDiff > 1) return 0; // Streak broken if more than 1 day gap
+    // Allow streak to continue if the latest completed day is today or yesterday
+    if (
+      latestEntryDateStr !== todayStr &&
+      latestEntryDateStr !== yesterdayStr
+    ) {
+      return 0; // Streak broken before yesterday
+    }
 
-    // Count consecutive days
-    for (let i = 0; i < sortedEntries.length; i++) {
-      const entryDate = new Date(sortedEntries[i].date);
-      const expectedDate = new Date(currentDate);
+    let streak = 0;
+    const baseDateStr = latestEntryDateStr; // start counting backward from the latest completed day
+
+    for (let i = 0; i < completedEntries.length; i++) {
+      const entryDateStr = getLocalDateString(
+        new Date(completedEntries[i].date),
+      );
+      const expectedDate = new Date(baseDateStr);
       expectedDate.setDate(expectedDate.getDate() - i);
-
-      // Normalize dates to compare only the date part
-      const entryDateStr = entryDate.toISOString().split('T')[0];
-      const expectedDateStr = expectedDate.toISOString().split('T')[0];
+      const expectedDateStr = getLocalDateString(expectedDate);
 
       if (entryDateStr === expectedDateStr) {
         streak++;
@@ -85,13 +94,10 @@ export class HabitsResolver {
 
   @ResolveField()
   async completedToday(@Parent() habit: Habit) {
-    const now = new Date();
-    const todayUTC = new Date(
-      Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()),
-    );
+    const localDateStr = getLocalDateString(new Date());
     const todayEntry = await this.habitsService.getHabitEntryByDate(
       habit.id,
-      todayUTC,
+      new Date(localDateStr),
     );
     return todayEntry?.completed || false;
   }
@@ -117,7 +123,6 @@ export class HabitsResolver {
   @Mutation(() => HabitEntry)
   @UseGuards(GraphqlJwtAuthGuard)
   async toggleHabit(@Args('input') input: ToggleHabitInput) {
-    const parsed = new Date(input.date);
-    return await this.habitsService.toggleHabitEntry(input.habitId, parsed);
+    return await this.habitsService.toggleHabitEntry(input.habitId);
   }
 }

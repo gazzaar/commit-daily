@@ -55,9 +55,7 @@ export default class UsersService {
   async createUser(createUserDto: CreateUserDto) {
     const user = {
       ...createUserDto,
-      createdAt: new Date(),
       id: crypto.randomUUID(),
-      updatedAt: new Date(),
     };
 
     const newUser = await this.prismaService.user.create({
