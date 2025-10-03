@@ -39,7 +39,10 @@ export class AuthenticationService {
       };
       return user;
     } catch (error) {
-      if (error?.code === PostgresErrorCode.UniqueViolation) {
+      if (
+        error?.code === PostgresErrorCode.UniqueViolation ||
+        error?.code === 'P2002'
+      ) {
         throw new HttpException(
           'User with that email already exists',
           HttpStatus.BAD_REQUEST,
