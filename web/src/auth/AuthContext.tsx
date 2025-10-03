@@ -5,19 +5,9 @@ import { API_URL } from '../config';
 
 type AuthContextType = {
   user: User | null | undefined;
-  login: ReturnType<
-    typeof useMutation<
-      { user: User },
-      Error,
-      { email: string; password: string }
-    >
-  >;
+  login: ReturnType<typeof useMutation<{ user: User }, Error, { email: string; password: string }>>;
   register: ReturnType<
-    typeof useMutation<
-      unknown,
-      Error,
-      { fullName: string; email: string; password: string }
-    >
+    typeof useMutation<unknown, Error, { fullName: string; email: string; password: string }>
   >;
   logout: () => void;
   isLoading: boolean;
@@ -26,9 +16,7 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const queryClient = useQueryClient();
 
   // validate token is now just "get user from server using cookie"
@@ -58,13 +46,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const isAuthenticated = !!user;
 
   const login = useMutation({
-    mutationFn: async ({
-      email,
-      password,
-    }: {
-      email: string;
-      password: string;
-    }) => {
+    mutationFn: async ({ email, password }: { email: string; password: string }) => {
       const response = await fetch(`${API_URL}/auth/log-in`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -73,7 +55,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       });
 
       if (!response.ok) {
-        throw new Error('Auth failed');
+        const error = await response.json();
+        throw new Error(error.message);
       }
 
       return response.json();
@@ -106,7 +89,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       });
 
       if (!response.ok) {
-        throw new Error('Sign up failed');
+        const error = await response.json();
+        throw new Error(error.message);
       }
 
       return response.json();
