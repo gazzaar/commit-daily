@@ -38,7 +38,7 @@
 
   /** HEADER  **/
   .header {
-    @apply flex items-center justify-between max-w-[1440px] mx-auto pt-3 px-4 sm:px-6 lg:px-8;
+    @apply flex items-center justify-between max-w-[1140px] mx-auto pt-3 px-4 sm:px-6 lg:px-8;
 
     div {
       @apply flex items-center gap-6;
@@ -94,11 +94,6 @@
       @apply hover:border-b-1 text-dodger-blue-200 hover:text-dodger-blue-500 transition;
     }
   }
-  .btnsContainer {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-  }
 
   .btn {
     @apply inline-block  bg-none  text-xl py-1 px-3 rounded-md  focus:scale-95 transition;
@@ -148,6 +143,11 @@
   .dialog {
     @apply m-auto  bg-dodger-blue-950 rounded-lg shadow-lg;
 
+    #close {
+      @apply text-dodger-blue-50 hover:text-dodger-blue-950 text-2xl ml-4 mt-3 rounded-md px-2 transition hover:bg-dodger-blue-50
+      active:scale-95;
+    }
+
     .form-add-habit {
       @apply bg-dodger-blue-950 max-w-[600px] min-w-[500px]  px-8 py-6 rounded-md   flex flex-col gap-4 justify-center text-dodger-blue-50;
 
@@ -165,6 +165,22 @@
       .btn {
         @apply bg-dodger-blue-500 text-dodger-blue-50 hover:bg-dodger-blue-600;
       }
+    }
+  }
+  .habits-header {
+    @apply flex items-center justify-between px-4 mb-2;
+
+    div {
+      @apply flex flex-col gap-2;
+      h1 {
+        @apply text-3xl font-bold text-dodger-blue-950;
+      }
+      p {
+        @apply text-gray-700;
+      }
+    }
+    .btn {
+      @apply bg-dodger-blue-950 text-dodger-blue-50 px-4 border flex items-center gap-2 hover:bg-dodger-blue-900;
     }
   }
 }
