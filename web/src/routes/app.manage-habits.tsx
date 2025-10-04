@@ -4,6 +4,7 @@ import HabitItem from '../components/HabitItem/HabitItem';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { TbEdit } from 'react-icons/tb';
 import { useRef, useState } from 'react';
+import { FaPlus } from 'react-icons/fa6';
 
 export const Route = createFileRoute('/app/manage-habits')({
   component: HabitManageMent,
@@ -13,6 +14,9 @@ function HabitManageMent() {
   const { data, isLoading, error } = useHabits();
   const deleteHabit = useDeleteHabit();
   const createHabit = useCreateHabit();
+  const [newHabitName, setNewHabitName] = useState('');
+  const [newHabitDesc, setNewHabitDesc] = useState('');
+  const [errors, setErrors] = useState<string | null>(null);
   const dialogRef = useRef<HTMLDialogElement | null>(null);
 
   const openDialog = () => {
@@ -21,6 +25,7 @@ function HabitManageMent() {
 
   const closeDialog = () => {
     if (dialogRef.current) dialogRef.current.close();
+    (document.activeElement as HTMLElement)?.blur();
   };
 
   const handleDeleteHabit = async (habitId: string) => {
@@ -32,20 +37,29 @@ function HabitManageMent() {
   };
 
   // Create Habit
-  const handleCreateHabit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleCreateHabit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const habitName = formData.get('habitName') as string;
-    const description = formData.get('description') as string;
 
-    if (!habitName.trim()) return;
+    (document.activeElement as HTMLElement)?.blur();
+    setErrors(null);
+
+    if (!newHabitName.trim() || !newHabitDesc.trim()) {
+      setErrors("Entries can't be empty!");
+      return;
+    }
 
     try {
       await createHabit.mutateAsync({
-        habitName: habitName.trim(),
-        description: description.trim(),
+        habitName: newHabitName.trim(),
+        description: newHabitDesc.trim(),
       });
-    } catch (error) {
+
+      setNewHabitName('');
+      setNewHabitDesc('');
+    } catch (error: any) {
+      setErrors(error.message);
+      setNewHabitName('');
+      setNewHabitDesc('');
       console.error('Failed to create habit', error);
     }
   };
@@ -55,23 +69,31 @@ function HabitManageMent() {
 
   return (
     <>
-      <button onClick={() => openDialog()}>Add new habit</button>
-      <div className='habits'>
+      <aside className="habits-header">
+        <div>
+          <h1>Your habits</h1>
+          <p>Manage and track your daily habits</p>
+        </div>
+        <button onClick={() => openDialog()} className="btn">
+          <span>
+            <FaPlus />
+          </span>
+          Add habit
+        </button>
+      </aside>
+      <div className="habits">
         {data?.habits.map((habit) => (
           <HabitItem habitData={habit} key={habit.id}>
             {() => (
               <>
-                <button className='btn-edit'>
+                <button className="btn-edit">
                   {' '}
                   <span>
                     <TbEdit />
                   </span>{' '}
                   Edit
                 </button>
-                <button
-                  className='btn btn-delete'
-                  onClick={() => handleDeleteHabit(habit.id)}
-                >
+                <button className="btn btn-delete" onClick={() => handleDeleteHabit(habit.id)}>
                   <RiDeleteBin6Line />
                 </button>
               </>
@@ -79,24 +101,40 @@ function HabitManageMent() {
           </HabitItem>
         ))}
       </div>
-      <dialog id='dialog' ref={dialogRef} className='dialog'>
-        <button id='close' onClick={closeDialog}>
-          Close
+      <dialog id="dialog" ref={dialogRef} className="dialog">
+        <button id="close" onClick={closeDialog}>
+          X
         </button>
-        <form className='form-add-habit' onSubmit={handleCreateHabit}>
-          <div className='input-container'>
+        <form className="form-add-habit" onSubmit={handleCreateHabit}>
+          <div className="input-container">
             <label> Habit Name</label>
-            <input type='text' name='habitName' required />
+            <input
+              type="text"
+              name="habitName"
+              required
+              placeholder="Gym"
+              value={newHabitName}
+              onChange={(e) => setNewHabitName(e.target.value)}
+            />
           </div>
 
-          <div className='input-container'>
+          <div className="input-container">
             <label> description</label>
-            <input type='text' name='description' required />
+            <input
+              type="text"
+              name="description"
+              required
+              placeholder="I don't want to be skinny 😞"
+              value={newHabitDesc}
+              onChange={(e) => setNewHabitDesc(e.target.value)}
+            />
           </div>
-          <button className='btn' type='submit'>
+          <button className="btn" type="submit">
             {' '}
             Create Habit
           </button>
+
+          <p className="text-sm text-red-500 min-h-[20px]">{errors ?? ' '}</p>
         </form>
       </dialog>
     </>

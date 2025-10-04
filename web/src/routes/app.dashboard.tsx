@@ -22,24 +22,33 @@ function Dashboard() {
 
   if (isLoading) return <h1>...</h1>;
   if (error) return <div> Error {(error as Error).message}</div>;
+  if (data?.habits.length < 1) return <p>No habits</p>;
 
   return (
-    <div className='habits'>
-      {data?.habits?.map((h) => (
-        <HabitItem habitData={h} key={h.id}>
-          {(inputId: string) => (
-            <>
-              <input
-                id={inputId}
-                type='checkbox'
-                checked={h.completedToday}
-                onChange={() => handleToggleHabit(h.id)}
-              />
-              <label htmlFor={inputId}> Complete today</label>
-            </>
-          )}
-        </HabitItem>
-      ))}
-    </div>
+    <>
+      <aside className="habits-header">
+        <div>
+          <h1>Daily habits</h1>
+          <p>{new Date().toLocaleDateString()}</p>
+        </div>
+      </aside>
+      <div className="habits">
+        {data?.habits?.map((h) => (
+          <HabitItem habitData={h} key={h.id}>
+            {(inputId: string) => (
+              <>
+                <input
+                  id={inputId}
+                  type="checkbox"
+                  checked={h.completedToday}
+                  onChange={() => handleToggleHabit(h.id)}
+                />
+                <label htmlFor={inputId}> Complete today</label>
+              </>
+            )}
+          </HabitItem>
+        ))}
+      </div>
+    </>
   );
 }
