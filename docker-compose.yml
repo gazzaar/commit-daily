@@ -1,12 +1,61 @@
 services:
   postgres:
     image: postgres:17-alpine
+    container_name: commitdaily-postgres
     env_file:
       - docker.env
     ports:
       - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - commitdaily-network
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-dev}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: production
+    container_name: commitdaily-backend
+    env_file:
+      - docker.env
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+    ports:
+      - '3000:3000'
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - commitdaily-network
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+      target: production
+      args:
+        VITE_API_URL: ${VITE_API_URL}
+    container_name: commitdaily-web
+    env_file:
+      - docker.env
+    ports:
+      - '3001:3000'
+    depends_on:
+      - backend
+    networks:
+      - commitdaily-network
+    restart: unless-stopped
+
+networks:
+  commitdaily-network:
+    driver: bridge
 
 volumes:
   postgres_data:
